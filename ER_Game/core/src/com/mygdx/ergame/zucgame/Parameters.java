@@ -17,7 +17,7 @@ public class Parameters {
      * Ritorna il rapporto tra larghezza e altezza dello schermo (aspectRatio)
      * @return
      */
-    public static float getAspectRatio(){
+    public static float getAspectRatio() {
         return aspectRatio;
     }
 
