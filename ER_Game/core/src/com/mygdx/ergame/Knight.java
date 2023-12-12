@@ -56,6 +56,10 @@ public class Knight extends GraphicObject {
         sprite.draw(sb);
     }
 
+    /**
+     * Questo metodo viene chiamato periodicamente per aggiornare la posizione del cavaliere sullo schermo
+     * e per gestire le varie situazioni in cui il cavaliere si trova (Idle, Walk)
+     */
     public void update() {
         switch (state) {
             case IDLE:
@@ -74,6 +78,5 @@ public class Knight extends GraphicObject {
                 sprite.update();
                 break;
         }
-
     }
 }

@@ -88,7 +88,6 @@ public class ERGame extends ApplicationAdapter implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         walk = !walk;
         knight.setWalk(walk);
-
         return true;
     }
 
