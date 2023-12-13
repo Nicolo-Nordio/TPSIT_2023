@@ -19,7 +19,8 @@ public class ERGame extends ApplicationAdapter implements InputProcessor {
     Sprite logoSprite;
 
     Knight knight;
-    boolean walk = true;
+
+    float floorLevel = 0.3f;
 
     @Override
     public void create() {
@@ -41,14 +42,20 @@ public class ERGame extends ApplicationAdapter implements InputProcessor {
         logoSprite.setY(0);
 
         knight = new Knight();
-        knight.setX(1);
-        knight.setY(0.3f);
+        knight.setX(-0.5f);
+        knight.setY(floorLevel);
 
         Gdx.input.setInputProcessor(this);
     }
 
     @Override
     public void render() {
+        if (knight.isWalking() && (knight.getX() >= camwidth * 0.25f)) {
+            knight.setRun(true);
+        } else if (knight.isFalling() && (knight.getY() <= floorLevel)) {
+            knight.setRun(true);
+            knight.setY(floorLevel);
+        }
         knight.update();
 
         ScreenUtils.clear(1, 0, 0, 1);
@@ -86,8 +93,10 @@ public class ERGame extends ApplicationAdapter implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        walk = !walk;
-        knight.setWalk(walk);
+        if (knight.isRunning()) {
+            knight.setJump(true);
+        }
+
         return true;
     }
 

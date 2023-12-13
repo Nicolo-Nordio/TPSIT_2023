@@ -12,8 +12,9 @@ public class ResourceLoader {
      * Mappa per la gestione delle texture
      */
     private static EnumMap<ResourceEnum, Texture> mapTexture = new EnumMap<>(ResourceEnum.class);
+
     /**
-     *
+     * Mappa per la gestione delle animazioni
      */
     private static EnumMap<ResourceEnum, Texture[]> mapAnimation = new EnumMap<>(ResourceEnum.class);
 
@@ -48,6 +49,7 @@ public class ResourceLoader {
             switch (index){
                 case LOGO:
                     break;
+
                 case KN_IDLE:
                     res = new Texture[10];
                     for (int i = 0; i < res.length; i++) {
@@ -55,6 +57,7 @@ public class ResourceLoader {
                         mapAnimation.put(index, res);
                     }
                     break;
+
                 case KN_WALK:
                     res = new Texture[10];
                     for (int i = 0; i < res.length; i++) {
@@ -71,14 +74,12 @@ public class ResourceLoader {
                     }
                     break;
                 case KN_JUMP:
-                    res = new Texture[10];
-                    for (int i = 0; i < res.length; i++) {
-                        res[i] = new Texture("knight/Knight_02__JUMP_00" + i + ".png");
+                    res = new Texture[3];
+                    for (int i = 4; i < (4 + res.length); i++) {
+                        res[i-4] = new Texture("knight/Knight_02__JUMP_00" + i + ".png");
                         mapAnimation.put(index, res);
                     }
                     break;
-                default:
-                    res = null;
             }
         }else {
             res = mapAnimation.get(index);
