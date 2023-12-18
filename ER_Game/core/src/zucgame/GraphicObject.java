@@ -1,4 +1,4 @@
-package com.mygdx.ergame.zucgame;
+package zucgame;
 
 /**
  * Classe di riferimento per tutti gli oggetti grafici disegnabili sullo schermo

@@ -1,4 +1,4 @@
-package com.mygdx.ergame.zucgame;
+package zucgame;
 
 public class Parameters {
     private static float aspectRatio;

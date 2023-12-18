@@ -5,12 +5,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.ergame.zucgame.AnimatedSprite;
-import com.mygdx.ergame.zucgame.Parameters;
-import com.mygdx.ergame.zucgame.Sprite;
+import zucgame.Parameters;
+import zucgame.Sprite;
 
 public class ERGame extends ApplicationAdapter implements InputProcessor {
     final int camwidth = 4;
@@ -20,8 +18,13 @@ public class ERGame extends ApplicationAdapter implements InputProcessor {
 
     Knight knight;
 
-    float floorLevel = 0.3f;
+    float floorLevel = 0.2f;
 
+    Level level;
+
+    /**
+     * Metodo che crea tutti gli aspetti di gioco
+     */
     @Override
     public void create() {
 
@@ -45,6 +48,9 @@ public class ERGame extends ApplicationAdapter implements InputProcessor {
         knight.setX(-0.5f);
         knight.setY(floorLevel);
 
+        level = new Level("livello 00", camwidth * Parameters.getInverseAspectRatio());
+        level.setKnight(knight);
+
         Gdx.input.setInputProcessor(this);
     }
 
@@ -56,7 +62,8 @@ public class ERGame extends ApplicationAdapter implements InputProcessor {
             knight.setRun(true);
             knight.setY(floorLevel);
         }
-        knight.update();
+
+        level.update();
 
         ScreenUtils.clear(1, 0, 0, 1);
 
@@ -65,8 +72,7 @@ public class ERGame extends ApplicationAdapter implements InputProcessor {
 
         batch.begin();
 
-        knight.draw(batch);
-
+        level.draw(batch);
         logoSprite.draw(batch);
         batch.end();
     }

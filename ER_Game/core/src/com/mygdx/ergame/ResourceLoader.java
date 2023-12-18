@@ -30,6 +30,26 @@ public class ResourceLoader {
                     mapTexture.put(index, new Texture("badlogic.jpg"));
                     break;
 
+                case SKY_LEVEL:
+                    mapTexture.put(index, new Texture("level00/Sky.png"));
+                    break;
+
+                case BG_LEVEL:
+                    mapTexture.put(index, new Texture("level00/bg.png"));
+                    break;
+
+                case MG_LEVEL:
+                    mapTexture.put(index, new Texture("level00/mg.png"));
+                    break;
+
+                case FG_LEVEL:
+                    mapTexture.put(index, new Texture("level00/fg.png"));
+                    break;
+
+                case G_LEVEL:
+                    mapTexture.put(index, new Texture("level00/g.png"));
+                    break;
+
                 default:
                     return null;
             }

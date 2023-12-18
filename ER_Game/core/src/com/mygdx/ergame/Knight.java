@@ -3,8 +3,8 @@ package com.mygdx.ergame;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.mygdx.ergame.zucgame.AnimatedSprite;
-import com.mygdx.ergame.zucgame.GraphicObject;
+import zucgame.AnimatedSprite;
+import zucgame.GraphicObject;
 
 public class Knight extends GraphicObject {
     enum KNIGHT_STATE {
