@@ -3,8 +3,7 @@ package zucgame;
 /**
  * Classe di riferimento per tutti gli oggetti grafici disegnabili sullo schermo
  */
-public abstract class
-GraphicObject implements Drawable{
+public abstract class GraphicObject implements Drawable{
     protected float x;
     protected float y;
     protected float width;

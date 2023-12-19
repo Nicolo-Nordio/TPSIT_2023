@@ -2,90 +2,120 @@ package com.mygdx.demo;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.mygdx.demo.zucgame.AnimatedSprite;
-import com.mygdx.demo.zucgame.Parameters;
-import com.mygdx.demo.zucgame.Sprite;
+import zucgame.AnimatedSprite;
+import zucgame.Parameters;
+import zucgame.Sprite;
 
-public class GameDemo extends ApplicationAdapter {
-	SpriteBatch batch;
-	Sprite sprite;	
-	Sprite sprite2;
+public class GameDemo extends ApplicationAdapter implements InputProcessor {
 
-	AnimatedSprite aSprite1;
+    final int camwidth = 4;
+    Camera cam;
+    SpriteBatch batch;
 
-	Camera cam;
 
-	@Override
-	public void create () {
+    Rebel rebel;
 
-		Parameters.setAspectRatio(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+    float floorLevel = 0.2f;
 
-		cam = new OrthographicCamera(4, 4 * Parameters.getInverseAspectRatio());
-		cam.position.set(2f,(2f * Parameters.getInverseAspectRatio()),0f);
+    Level level;
 
-		/*
-		  graphics.with : graphics.height = 4 : h
-		  h = (4 * graphics.height / graphics.width)
-		 */
+    /**
+     * Metodo che crea tutti gli aspetti di gioco
+     */
+    @Override
+    public void create() {
 
-		batch = new SpriteBatch();
-		sprite = new Sprite(new Texture("badlogic.jpg"));
-		sprite.setHeight(0.5f);
-		sprite2 = new Sprite(new Texture("badlogic.jpg"));
-		sprite2.setHeight(0.5f);
 
-		Texture[] frames = new Texture[10];
-		for(int i = 0; i < 10; i++){
-			frames[i] = new Texture("knight/Knight_02__RUN_00" + i + ".png");
-		}
-		aSprite1 = new AnimatedSprite(frames);
-		aSprite1.setWidth(3);
-		aSprite1.setOffsetX(-1.5f);
-		aSprite1.setOffsetY(-0.55f);
-	}
+        Parameters.setAspectRatio(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-	@Override
-	public void render () {
+        cam = new OrthographicCamera(camwidth, camwidth * Parameters.getInverseAspectRatio());
+        cam.position.set(camwidth * 0.5f, camwidth * Parameters.getInverseAspectRatio() * 0.5f, 0);
 
-		aSprite1.update();
+        batch = new SpriteBatch();
 
-		ScreenUtils.clear(1, 0, 0, 1);
 
-		cam.update();
-		batch.setProjectionMatrix(cam.combined);
+        rebel = new Rebel();
+        rebel.setX(-0.5f);
+        rebel.setY(floorLevel);
 
-		batch.begin();
-		sprite.draw(batch);
-		sprite2.draw(batch);
+        level = new Level("livello 00", camwidth * Parameters.getInverseAspectRatio());
+        level.setRebel(rebel);
 
-		aSprite1.draw(batch);
+        Gdx.input.setInputProcessor(this);
+    }
 
-		batch.end();
+    @Override
+    public void render() {
 
-		sprite.setX(sprite.getX() + 0.02f);
-		if(sprite.getX() > 4){
-			sprite.setX(-sprite.getWidth());
-		}
+        level.update();
 
-		sprite2.setY(sprite2.getY() + 0.02f);
-		if(sprite2.getY() > 4 * Parameters.getInverseAspectRatio()){
-			sprite2.setY(-sprite2.getHeight());
-		}
+        ScreenUtils.clear(1, 0, 0, 1);
 
-		aSprite1.setX(aSprite1.getX() + 0.02f);
-		if(aSprite1.getX() > 4){
-			aSprite1.setX(-aSprite1.getWidth());
-		}
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		//img.dispose();
-	}
+        cam.update();
+        batch.setProjectionMatrix(cam.combined);
+
+        batch.begin();
+
+        level.draw(batch);
+
+        batch.end();
+    }
+
+    @Override
+    public void dispose() {
+        batch.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
+    }
 }
+
+
