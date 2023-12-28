@@ -27,6 +27,5 @@ public class Coin extends GameObject{
     @Override
     public void manageCollisionWith(GameObject obj) {
         catchSound.play();
-        return;
     }
 }
