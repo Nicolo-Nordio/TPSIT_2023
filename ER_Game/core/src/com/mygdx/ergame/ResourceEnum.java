@@ -1,5 +1,8 @@
 package com.mygdx.ergame;
 
+/**
+ * L'elenco delle risposte nel gioco
+ */
 public enum ResourceEnum {
     LOGO,
     KN_IDLE,
@@ -10,5 +13,8 @@ public enum ResourceEnum {
     BG_LEVEL,
     MG_LEVEL,
     FG_LEVEL,
-    G_LEVEL
+    G_LEVEL,
+    COIN_GOLD,
+    BUBBLE,
+    AUDIO_COIN
 }

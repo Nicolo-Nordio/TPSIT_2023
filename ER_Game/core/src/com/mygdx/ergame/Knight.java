@@ -1,12 +1,15 @@
 package com.mygdx.ergame;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
-import zucgame.AnimatedSprite;
-import zucgame.GraphicObject;
 
-public class Knight extends GraphicObject {
+/**
+ * La classe descrive il cavaliere protagonista del progetto. Gestisce sia le informazioni
+ * di gioco, sia le informazioni relative all'animazione del personaggio
+ */
+public class Knight extends GameObject {
+    /**
+     * Gli stati di gioco in cui si può trovare il cavaliere
+     */
     enum KNIGHT_STATE {
         IDLE,
         WALK,
@@ -14,7 +17,6 @@ public class Knight extends GraphicObject {
         JUMP
     }
 
-    private AnimatedSprite sprite;
     private Texture[] animIdle;
     private Texture[] animWalk;
     private Texture[] animRun;
@@ -23,11 +25,11 @@ public class Knight extends GraphicObject {
     private boolean isRun = false;
     private boolean isJump = false;
     private KNIGHT_STATE state;
-    private Vector2 velocity;
+
     private int framesSkip = 0;
 
     /**
-     * Costruttore che attribuisce le animazioni alle variabili
+     * Imposta tutti i parametri del cavaliere ai valori di default
      */
     Knight() {
         super();
@@ -37,34 +39,20 @@ public class Knight extends GraphicObject {
         animRun = ResourceLoader.getAnimation(ResourceEnum.KN_RUN);
         animJump = ResourceLoader.getAnimation(ResourceEnum.KN_JUMP);
 
-        sprite = new AnimatedSprite(animIdle);
+        sprite.setAnimation(animIdle);
         sprite.setWidth(3);
         sprite.setOffsetX(-1.5f);
         sprite.setOffsetY(-0.5f);
+
+        setRadius(0.4f);
+        setBarycenter(0.1f, 0.4f);
 
         state = KNIGHT_STATE.IDLE;
         isWalk = false;
         isRun = false;
         isJump = false;
 
-        velocity = new Vector2(0, 0);
-
         entryWalk();
-    }
-
-    /**
-     * Vari setter
-     */
-    @Override
-    public void setX(float x) {
-        super.setX(x);
-        sprite.setX(x);
-    }
-
-    @Override
-    public void setY(float y) {
-        super.setY(y);
-        sprite.setY(y);
     }
 
     public void setWalk(boolean walk) {
@@ -79,20 +67,7 @@ public class Knight extends GraphicObject {
         isJump = jump;
     }
 
-    /**
-     * Settaggio velocità che usa il polimorfismo verticale
-     *
-     * @param velocity
-     */
-    public void setVelocity(Vector2 velocity) {
-        this.velocity.x = velocity.x;
-        this.velocity.y = velocity.y;
-    }
 
-    public void setVelocity(float vx, float vy) {
-        velocity.x = vx;
-        velocity.y = vy;
-    }
 
     /**
      * Metodo che verifica se il cavaliere sta camminando
@@ -130,41 +105,12 @@ public class Knight extends GraphicObject {
         return state == KNIGHT_STATE.JUMP && velocity.y <= 0;
     }
 
-
-    /**
-     * Restituisce una copia della velocità del knight nel momento in cui ho fatto richiesta
-     *
-     * @return nuovo vettore però con gli stessi attributi di 'velocity'
-     */
-    public Vector2 getVelocity() {
-        return new Vector2(velocity);
-    }
-
-    /**
-     * Metodo che disegna la texture
-     *
-     * @param sb
-     */
-    @Override
-    public void draw(SpriteBatch sb) {
-        sprite.draw(sb);
-    }
-
     /**
      * Questo metodo viene chiamato periodicamente per aggiornare la posizione del cavaliere sullo schermo
      * e per gestire le varie situazioni in cui il cavaliere si trova (Idle, Walk)
      */
     public void update() {
         switch (state) {
-            case IDLE:
-                if (isWalk) {
-                    entryWalk();
-                    doWalk();
-                } else {
-                    doIdle();
-                }
-                break;
-
             case WALK:
                 if (isRun) {
                     entryRun();
@@ -193,39 +139,11 @@ public class Knight extends GraphicObject {
                 break;
 
             default:
-                entryIdle();
-                doIdle();
-                break;
         }
     }
 
     /**
-     * Metodo che setta 'state' 'animation' 'velocity'
-     * SOLO quando entra in modalità idle
-     */
-    private void entryIdle() {
-        state = KNIGHT_STATE.WALK;
-        sprite.setAnimation(animWalk);
-        velocity.x = 0.01f;
-        framesSkip = 0;
-        isWalk = false;
-    }
-
-    /**
-     * Metodo che fa 'update()' dello sprite [lo fa star fermo]
-     */
-    private void doIdle() {
-        if (framesSkip % 2 == 0) {
-            sprite.update();
-            framesSkip++;
-        } else {
-            framesSkip = 0;
-        }
-    }
-
-    /**
-     * Metodo che setta 'state' 'animation' 'velocity'
-     * SOLO quando entra in modalità camminata
+     * Gestisce l'ingresso nello stato WALK
      */
     private void entryWalk() {
         state = KNIGHT_STATE.WALK;
@@ -236,8 +154,7 @@ public class Knight extends GraphicObject {
     }
 
     /**
-     * Metodo che fa 'update()' dello sprite [lo fa camminare]
-     * e fa muovere lo sprite nell'asse x
+     * Gestisce il comportamento nello stato WALK
      */
     private void doWalk() {
         if (framesSkip % 2 == 0) {
@@ -246,24 +163,25 @@ public class Knight extends GraphicObject {
         } else {
             framesSkip = 0;
         }
-        setX(x + velocity.x);
+        updatePhysic();
     }
 
     /**
-     * Metodo che setta 'state' 'animation' 'velocity'
-     * SOLO quando entra in modalità corsa
+     * Gestisce l'ingresso nello stato RUN
      */
     private void entryRun() {
         state = KNIGHT_STATE.RUN;
         sprite.setAnimation(animRun);
         velocity.x = 0;
         framesSkip = 0;
+        setVelocity(0, 0);
+        setAcceleration(0, 0);
+
         isRun = false;
     }
 
     /**
-     * Metodo che fa 'update()' dello sprite [lo fa correre]
-     * e fa muovere lo sprite nell'asse x
+     * Gestisce il comportamento nello stato RUN
      */
     private void doRun() {
         if (framesSkip % 2 == 0) {
@@ -275,20 +193,19 @@ public class Knight extends GraphicObject {
     }
 
     /**
-     * Metodo che setta 'state' 'animation' 'velocity'
-     * SOLO quando entra in modalità salto
+     * Gestisce l'ingresso nello stato JUMP
      */
     private void entryJump() {
         state = KNIGHT_STATE.JUMP;
         sprite.setAnimation(animJump);
-        velocity.y = 0.3f;
+        velocity.y = 0.12f;
         framesSkip = 0;
         isJump = false;
+        acceleration.y = -0.005f;
     }
 
     /**
-     * Metodo che fa 'update()' dello sprite [lo fa saltare]
-     * e fa muovere lo sprite nell'asse y
+     * Gestisce il comportamento nello stato JUMP
      */
     private void doJump() {
         if (framesSkip % 2 == 0) {
@@ -297,7 +214,14 @@ public class Knight extends GraphicObject {
         } else {
             framesSkip = 0;
         }
-        velocity.y += -0.02f;
-        setY(y + velocity.y);
+        updatePhysic();
     }
+
+    @Override
+    public void manageCollisionWith(GameObject obj) {
+        if (obj instanceof Coin) {
+            System.out.println("Ho trovato una moneta!!");
+        }
+    }
+
 }

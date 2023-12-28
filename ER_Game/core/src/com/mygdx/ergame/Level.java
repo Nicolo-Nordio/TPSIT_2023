@@ -25,6 +25,8 @@ public class Level implements Drawable {
 
     private Knight knight;
 
+    private GameObject[] objects;
+
     /**
      * Costruttore classe 'Level' che setta i vari parametri incluse tutte le Texture del livello
      */
@@ -48,6 +50,14 @@ public class Level implements Drawable {
         this.gPicture = ResourceLoader.getTexture(ResourceEnum.G_LEVEL);
 
         this.knight = null;
+
+        this.objects = new GameObject[100];
+        for (int i = 0; i < 10; i++) {
+            this.objects[i] = new Coin();
+            this.objects[i].setX(4 + (float)(Math.random() * 3 * i));
+            this.objects[i].setY(0.5f);
+            this.objects[i].setVelocity(this.speed, 0);
+        }
     }
 
     /**
@@ -80,14 +90,6 @@ public class Level implements Drawable {
      */
     public void setSpeed(float speed) {
         this.speed = speed;
-        fx += this.speed;
-        if (fx <= -width) fx = fx + width;
-
-        mx += this.speed * 0.5f;
-        if (mx <= -width) mx = mx + width;
-
-        bx += this.speed * 0.25f;
-        if (bx <= -width) bx = bx + width;
     }
 
     /**
@@ -118,6 +120,12 @@ public class Level implements Drawable {
         sb.draw(fgPicture, fx, 0, width, height);
         sb.draw(fgPicture, fx + width, 0, width, height);
 
+        if (!knight.isWalking()) {
+            for (GameObject gameObject : objects) {
+                if (gameObject != null) gameObject.draw(sb);
+            }
+        }
+
         knight.draw(sb); //Messo in questo spazio per far si che sia dietro il 'gPicture'
 
         sb.draw(gPicture, fx, 0, width, height);
@@ -132,7 +140,26 @@ public class Level implements Drawable {
 
         // I frame si spostano solo se il cavaliere non sta camminando
         if (!knight.isWalking()) {
-            setSpeed(speed);
+            for(int i=0; i<objects.length; i++) {
+                GameObject gameObject = objects[i];
+                if (gameObject != null) {
+                    gameObject.update();
+                    if(knight.collidesWith(gameObject)) {
+                        knight.manageCollisionWith(gameObject);
+                        gameObject.manageCollisionWith(knight);
+                        objects[i] = null;
+                    }
+                }
+            }
+
+            fx += this.speed;
+            if (fx <= -width) fx = fx + width;
+
+            mx += this.speed * 0.5f;
+            if (mx <= -width) mx = mx + width;
+
+            bx += this.speed * 0.25f;
+            if (bx <= -width) bx = bx + width;
         }
     }
 }
