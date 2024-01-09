@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class SpaceGame extends Game {
 
     public static final int WIDTH = 480;
-    public static final int HEIGHT = 75 0;
+    public static final int HEIGHT = 750;
 
     SpriteBatch batch;
 

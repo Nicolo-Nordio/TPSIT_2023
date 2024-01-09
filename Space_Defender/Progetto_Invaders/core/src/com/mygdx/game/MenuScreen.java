@@ -9,17 +9,29 @@ public class MenuScreen implements Screen {
 
     private static final float EXIT_BUTTON_WIDTH = 300;
     private static final float EXIT_BUTTON_HEIGHT = 150;
-    private static final float EXIT_BUTTON_Y = 125;
+    private static final float EXIT_BUTTON_Y = 45;
 
     private static final float PLAY_BUTTON_WIDTH = 330;
     private static final float PLAY_BUTTON_HEIGHT = 150;
-    private static final float PLAY_BUTTON_Y = 325;
+    private static final float PLAY_BUTTON_Y = 225;
+
+    private static final float TITLE_WIDTH_1 = 300;
+    private static final float TITLE_HEIGHT_1 = 300;
+    private static final float TITLE_Y_1 = 450;
+
+    private static final float TITLE_WIDTH_2 = 300;
+    private static final float TITLE_HEIGHT_2 = 300;
+    private static final float TITLE_Y_2 = 450;
 
     Texture playButtonActive;
     Texture playButtonInactive;
 
     Texture exitButtonActive;
     Texture exitButtonInactive;
+
+    Texture title1;
+    Texture title2;
+
     SpaceGame game;
 
     MenuScreen(SpaceGame game){
@@ -29,6 +41,9 @@ public class MenuScreen implements Screen {
 
         exitButtonActive = new Texture("exit_button_active.png");
         exitButtonInactive = new Texture("exit_button_inactive.png");
+
+        title1 = new Texture("titles/title1.png");
+        title2 = new Texture("titles/title2.png");
     }
 
     @Override
@@ -38,7 +53,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0.15f, 0.15f, 0.3f, 1);
+        ScreenUtils.clear(0f, 0f, 0f, 1);
 
         game.batch.begin();
 
@@ -63,6 +78,12 @@ public class MenuScreen implements Screen {
         } else {
             game.batch.draw(playButtonInactive, x, PLAY_BUTTON_Y, PLAY_BUTTON_WIDTH, PLAY_BUTTON_HEIGHT);
         }
+
+        x = (float) SpaceGame.WIDTH / 2 - TITLE_WIDTH_1 / 2;
+        game.batch.draw(title1, x, TITLE_Y_1, TITLE_WIDTH_1, TITLE_HEIGHT_1);
+
+        x = (float) SpaceGame.WIDTH / 2 - TITLE_WIDTH_1 / 2;
+        //game.batch.draw(title2, x, TITLE_Y_2, TITLE_WIDTH_2, TITLE_HEIGHT_2);
 
         game.batch.end();
     }

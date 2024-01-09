@@ -9,9 +9,9 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen implements Screen {
 
-    static final float SPEED = 120;
+    static final float SPEED = 350;
 
-    static final float SHIP_WIDTH = 200;
+    static final float SHIP_WIDTH = 100;
     static final float SHIP_HEIGHT = 100; //fare inverseAspectRatio
 
     Texture spaceShip;
@@ -35,11 +35,11 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A)) {
             x -= SPEED * Gdx.graphics.getDeltaTime();
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) {
             x += SPEED * Gdx.graphics.getDeltaTime();
         }
 

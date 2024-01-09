@@ -13,5 +13,7 @@ public class DesktopLauncher {
 		config.setWindowedMode(SpaceGame.WIDTH, SpaceGame.HEIGHT);
 		config.setResizable(false);
 		new Lwjgl3Application(new SpaceGame(), config);
+
+		//https://app.scenario.com
 	}
 }
